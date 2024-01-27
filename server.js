@@ -4,7 +4,8 @@ import dotenv from "dotenv";
 import express from "express";
 import bodyParser from "body-parser";
 import connectDB from "./config/db.js";
-import testRoutes from "./routes/testRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
+import errorMiddleware from "./middleware/errorMiddleware.js";
 
 const app = express();
 const PORT = 8000;
@@ -16,10 +17,11 @@ dotenv.config();
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
+app.use(errorMiddleware)
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Routes
-app.use("/api/v1/test-post", testRoutes);
+app.use("/api/v1/auth", authRoutes);
 
 app.listen(PORT, async () => {
   await connectDB();
